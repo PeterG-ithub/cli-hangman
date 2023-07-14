@@ -9,6 +9,7 @@ class Game
     @word = 'testing'
     @placeholder = []
     @guesses = []
+    @incorrect_guesses = []
   end
 
   def random_word
@@ -44,7 +45,9 @@ class Game
   end
 
   def print_placeholder
+    remaining_guess(10 - @incorrect_guesses.count)
     puts @placeholder.join(' ').bold.blue
+    puts ''
   end
 
   def handle_guess(player_guess)
@@ -52,9 +55,11 @@ class Game
       @word.split('').each_with_index do |char, idx|
         @placeholder[idx] = player_guess if char == player_guess
       end
-    else
-      wrong_guess
       @guesses << player_guess
+    else
+      @guesses << player_guess
+      @incorrect_guesses << player_guess
+      wrong_guess(@incorrect_guesses)
     end
   end
 
@@ -70,9 +75,9 @@ class Game
   end
 
   def guess_input
-    puts ''
     print 'Please enter a character: '
     guess = gets.chomp
+    puts ''
     until correct_guess?(guess)
       invalid_guess
       guess = gets.chomp
@@ -82,7 +87,17 @@ class Game
 
   def correct_guess?(guess)
     if guess.length == 1
-      true if guess.count('a-zA-Z').positive?
+      true if guess.count('a-zA-Z').positive? && !guess_already?(guess)
+    else
+      false
+    end
+  end
+
+  def guess_already?(guess)
+    if @guesses.any?(guess)
+      puts 'You already guess that.'
+      print_placeholder
+      true
     else
       false
     end

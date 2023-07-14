@@ -36,17 +36,27 @@ def play_load
   puts "       #{'2'.yellow.bold} to #{'Load'.yellow.bold}"
 end
 
-def wrong_guess
+def wrong_guess(guesses)
   puts 'Wrong guess sorry'
+  puts "Your incorrect guesses {#{guesses.join(', ').bold.red}}"
 end
 
 def remaining_guess(num)
   puts "You have #{num} guesses remaining."
-  print 'Please enter a character: '
 end
 
 def invalid_guess
   puts 'Invalid guess.'
   print 'Please enter a character: '
+end
+
+def winner
+  puts 'Congratulations! You won!'
+  puts 'Goodbye!'
+end
+
+def loser
+  puts 'Unfortunately, You lost!'
+  puts 'Goodbye!'
 end
 # rubocop:enable Metrics/MethodLength
