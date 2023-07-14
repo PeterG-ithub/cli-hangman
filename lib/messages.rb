@@ -36,4 +36,7 @@ def play_load
   puts "       #{'2'.yellow.bold} to #{'Load'.yellow.bold}"
 end
 
+def wrong_guess
+  puts 'Wrong guess sorry'
+end
 # rubocop:enable Metrics/MethodLength
