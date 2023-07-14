@@ -8,6 +8,7 @@ class Game
   def initialize
     @word = 'testing'
     @placeholder = []
+    @guesses = []
   end
 
   def random_word
@@ -53,12 +54,50 @@ class Game
       end
     else
       wrong_guess
+      @guesses << player_guess
     end
   end
 
   def start_round
+    puts @word
     print_placeholder
-    handle_guess
+    loop do
+      break if game_over?
+
+      handle_guess(guess_input)
+      print_placeholder
+    end
+  end
+
+  def guess_input
+    puts ''
+    print 'Please enter a character: '
+    guess = gets.chomp
+    until correct_guess?(guess)
+      invalid_guess
+      guess = gets.chomp
+    end
+    guess.downcase
+  end
+
+  def correct_guess?(guess)
+    if guess.length == 1
+      true if guess.count('a-zA-Z').positive?
+    else
+      false
+    end
+  end
+
+  def game_over?
+    if @word == @placeholder.join('')
+      winner
+      true
+    elsif @guesses.count == 10
+      loser
+      true
+    else
+      false
+    end
   end
 end
 

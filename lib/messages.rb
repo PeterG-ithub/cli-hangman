@@ -39,4 +39,14 @@ end
 def wrong_guess
   puts 'Wrong guess sorry'
 end
+
+def remaining_guess(num)
+  puts "You have #{num} guesses remaining."
+  print 'Please enter a character: '
+end
+
+def invalid_guess
+  puts 'Invalid guess.'
+  print 'Please enter a character: '
+end
 # rubocop:enable Metrics/MethodLength
