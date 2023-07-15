@@ -3,13 +3,13 @@
 # rubocop:disable Metrics/MethodLength
 # Game class for main game logic
 class Game
-  attr_accessor :word
+  attr_accessor :word, :placeholder, :guesses, :incorrect_guesses
 
-  def initialize
-    @word = 'testing'
-    @placeholder = []
-    @guesses = []
-    @incorrect_guesses = []
+  def initialize(word = 'testing', placeholder = [], guesses = [], incorrect_guesses = [])
+    @word = word
+    @placeholder = placeholder
+    @guesses = guesses
+    @incorrect_guesses = incorrect_guesses
   end
 
   def random_word
@@ -21,6 +21,12 @@ class Game
     system('clear')
     random_word
     create_placeholder
+    start_round
+  end
+
+  def load_game
+    data = deserialize('./saves/test.json')
+    initialize(data['word'], data['placeholder'], data['guesses'], data['incorrect_guesses'])
     start_round
   end
 
@@ -88,6 +94,8 @@ class Game
   def correct_guess?(guess)
     if guess.length == 1
       true if guess.count('a-zA-Z').positive? && !guess_already?(guess)
+    elsif guess.downcase == 'save'
+      save_game
     else
       false
     end
@@ -107,12 +115,25 @@ class Game
     if @word == @placeholder.join('')
       winner
       true
-    elsif @guesses.count == 10
+    elsif @incorrect_guesses.count == 10
       loser
       true
     else
       false
     end
+  end
+
+  def save_game
+    serialize('./saves/test.json', self)
+  end
+
+  def to_json(*args)
+    {
+      word: @word,
+      placeholder: @placeholder,
+      guesses: @guesses,
+      incorrect_guesses: @incorrect_guesses
+    }.to_json(*args)
   end
 end
 
